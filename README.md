@@ -44,3 +44,24 @@ flowchart LR
 terraform init
 terraform plan
 terraform apply -auto-approve
+## Verificación end-to-end
+
+Obtén la URL del API desde los outputs de Terraform:
+
+```bash
+terraform output api_process_url
+```
+
+Primera llamada — retorna X-Cache: MISS:
+```bash
+curl -s -D - -X POST https://<API_URL>/process \
+  -H "Content-Type: application/json" \
+  -d '{"data":"test456"}'
+```
+
+Segunda llamada idéntica — retorna X-Cache: HIT:
+```bash
+curl -s -D - -X POST https://<API_URL>/process \
+  -H "Content-Type: application/json" \
+  -d '{"data":"test456"}'
+```
