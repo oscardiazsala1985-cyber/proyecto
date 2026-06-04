@@ -1,6 +1,9 @@
 resource "aws_cloudwatch_log_group" "api_access" {
   name              = "/aws/apigateway/${local.name}-http-api-access"
   retention_in_days = var.log_retention_days
+  
+  
+  tags = merge({ Name = "${local.name}-api-logs" }, var.common_tags)
 }
 
 resource "aws_apigatewayv2_api" "http" {
@@ -8,11 +11,14 @@ resource "aws_apigatewayv2_api" "http" {
   protocol_type = "HTTP"
 
   cors_configuration {
-    allow_origins = ["*"]
+    allow_origins = ["*"] 
     allow_methods = ["POST", "OPTIONS"]
     allow_headers = ["*"]
     max_age       = 3600
   }
+
+  
+  tags = merge({ Name = "${local.name}-http-api" }, var.common_tags)
 }
 
 resource "aws_apigatewayv2_integration" "lambda" {

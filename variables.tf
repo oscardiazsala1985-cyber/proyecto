@@ -14,6 +14,12 @@ variable "environment" {
   description = "Environment name."
   type        = string
   default     = "dev"
+  
+  
+  validation {
+    condition     = contains(["dev", "qa", "prod"], var.environment)
+    error_message = "El valor de environment debe ser estrictamente 'dev', 'qa' o 'prod'."
+  }
 }
 
 variable "vpc_cidr" {
@@ -80,4 +86,16 @@ variable "log_retention_days" {
   description = "CloudWatch Logs retention in days."
   type        = number
   default     = 14
+}
+
+
+variable "common_tags" {
+  description = "Etiquetas base para cumplimiento corporativo y facturacion."
+  type        = map(string)
+  default = {
+    Project     = "sre-process-service"
+    Environment = "dev"
+    ManagedBy   = "Terraform"
+    Owner       = "Oscar Diaz"
+  }
 }

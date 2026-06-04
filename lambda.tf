@@ -7,6 +7,9 @@ data "archive_file" "lambda_zip" {
 resource "aws_cloudwatch_log_group" "lambda" {
   name              = "/aws/lambda/${local.name}-processor"
   retention_in_days = var.log_retention_days
+  
+  
+  tags = merge({ Name = "${local.name}-lambda-logs" }, var.common_tags)
 }
 
 resource "aws_lambda_function" "processor" {
@@ -33,6 +36,7 @@ resource "aws_lambda_function" "processor" {
     }
   }
 
+  
   depends_on = [
     aws_cloudwatch_log_group.lambda,
     aws_iam_role_policy_attachment.lambda_basic,
@@ -40,4 +44,7 @@ resource "aws_lambda_function" "processor" {
     aws_iam_role_policy.lambda_s3,
     aws_elasticache_cluster.redis
   ]
+
+  
+  tags = merge({ Name = "${local.name}-processor" }, var.common_tags)
 }

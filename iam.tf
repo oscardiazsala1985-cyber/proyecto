@@ -9,6 +9,9 @@ resource "aws_iam_role" "lambda_exec" {
       Action    = "sts:AssumeRole"
     }]
   })
+
+  
+  tags = merge({ Name = "${local.name}-lambda-role" }, var.common_tags)
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_basic" {
